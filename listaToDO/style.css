@@ -1,0 +1,40 @@
+*{
+    background-color: rgb(209, 255, 124);
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: black;
+}
+
+h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(5 5 5) 0px 5px 15px;
+    background-color: white;
+}
+
+.area_tarefa {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.area_tarefa label {
+    padding-right: 10px;
+    font-size: 20px;
+}
+
+h5 {
+    color: red;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 400;
+}
+
+p {
+    color: red;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 400;
+}
+
