@@ -2,6 +2,8 @@ function adicionaTarefaNaLista(){
 
     const novatarefa = document.getElementById('input_nova_tarefa').value
     criaNovoItemDaLista(novatarefa)
+   
+    salvarDadosLocalStorage()
 }
 
 function criaNovoItemDaLista(textodatarefa){
@@ -34,7 +36,7 @@ function criaBotaoAtualizarTarefa(idTarefa) {
     
     buttonUpdate.style.backgroundColor = 'black'
    
-    return buttonUpdate;
+    return buttonUpdate
 }
 
 function updateTarefa(idTarefa) {
@@ -43,6 +45,8 @@ function updateTarefa(idTarefa) {
     tarefa.innerText = newText;
     tarefa.appendChild(criaInputCheckBoxTarefa(idTarefa))
     tarefa.appendChild(criaBotaoAtualizarTarefa(idTarefa))
+
+    salvarDadosLocalStorage()
 
 }
 
@@ -56,28 +60,60 @@ function mudaEstadoTarefas(idTarefa) {
     } else {
         tarefaSelecionada.style.textDecoration = 'line-through'
         if(isHidden == true)
-        tarefaSelecionada.style.display = 'none';
+        tarefaSelecionada.style.display = 'none'
     }
+    salvarDadosLocalStorage()
 }
 
 function escondeTarefa() {
     console.log("isHidden:", isHidden)
-    isHidden = !isHidden;
+    isHidden = !isHidden
 
     if (isHidden === true) {
-        let listaTarefas = document.getElementById('lista_de_tarefa');
+        let listaTarefas = document.getElementById('lista_de_tarefa')
         for (let index = 0; index < listaTarefas.children.length; index++) {
-            let tarefa = document.getElementById(`tarefa_id_${index}`);
+            let tarefa = document.getElementById(`tarefa_id_${index}`)
 
             if (tarefa.style.textDecoration === 'line-through')
-                tarefa.style.display = 'none';
+                tarefa.style.display = 'none'
         }
+    salvarDadosLocalStorage()
     }
 }
 
+function salvarDadosLocalStorage() {   //salvar dados no local storage do nagevador
+    const listaTarefas = document.getElementById('lista_de_tarefa')
+    let dadosTarefas = []
+    for (let index = 0; index < listaTarefas.children.length; index++) {  
+    let tarefa = document.getElementById(`tarefa_id_${index}`)
+    let dadosTarefa = {  //extraçao de dados da tarefa
+        id: tarefa.id,
+        texto: tarefa.innerText,
+        concluida: tarefa.style.textDecoration === 'line-through' ? true : false
+ }
+    dadosTarefas.push(dadosTarefa)
+ }
+    const dadosJSON = JSON.stringify(dadosTarefas)
+    localStorage.setItem('listaDeTarefas', dadosJSON)
+ }
 
+function carregarDadosLocalStorage() {
+    if (localStorage.getItem('listaDeTarefas')) {
+    const dadosJSON = localStorage.getItem('listaDeTarefas')     //verifica se ha dados salvos no local storage
+    const dadosTarefas = JSON.parse(dadosJSON)   //os dados sao recuperados e transformados em array
+    dadosTarefas.forEach((dadosTarefa) => {     //para cada taerfa e criado um elemento li
+         const novoItem = document.createElement('li')
+         novoItem.id = dadosTarefa.id
+         novoItem.innerText = dadosTarefa.texto
+     if (dadosTarefa.concluida) {
+         novoItem.style.textDecoration = 'line-through'
+}
+    novoItem.appendChild(criaInputCheckBoxTarefa(dadosTarefa.id))
+    novoItem.appendChild(criaBotaoAtualizarTarefa(dadosTarefa.id))
+    document.getElementById('lista_de_tarefa').appendChild(novoItem)
+})
+}
+}
 
-
-
-
+carregarDadosLocalStorage()  //carregar os dados do local storage assim que a pagina e carregada
 
